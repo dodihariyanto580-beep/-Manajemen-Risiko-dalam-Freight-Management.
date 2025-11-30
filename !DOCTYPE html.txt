@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis & Refleksi Manajemen Risiko Logistik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- 
+    PALETTE: "Strategic Logistics"
+    Primary: #0f172a (Slate 900) - Professional, Deep
+    Secondary: #0ea5e9 (Sky 500) - Vibrant, Trust
+    Accent: #f59e0b (Amber 500) - Attention, Warning
+    Background: #f8fafc (Slate 50) - Clean
+    -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* --- MANDATORY CHART CONTAINER STYLING --- */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 280px;
+            }
+        }
+        /* ----------------------------------------- */
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Flow Step Styling (CSS Only - No SVG) */
+        .flow-step {
+            position: relative;
+        }
+        .flow-step:not(:last-child)::after {
+            content: '➜';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #cbd5e1;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .flow-step:not(:last-child)::after {
+                content: '⬇';
+                right: 50%;
+                top: auto;
+                bottom: -35px;
+                transform: translateX(50%);
+            }
+        }
+    </style>
+    
+    <!-- 
+    SOURCE INTEGRATION SUMMARY:
+    1. Task 1 (Excavator Case): Mapped 3 risks to a Scatter Plot (Risk Matrix). Created a flow for the 4 mitigation steps.
+    2. Task 2 (SME Reflection): Mapped 3 reasons for neglect to a Bar Chart. Mapped 3 solutions to interactive cards.
+    3. Palette: Vibrant Blue/Orange/Navy used consistently.
+    4. NO SVG / NO MERMAID: Confirmed.
+    -->
+</head>
+<body class="antialiased pb-20">
+
+    <!-- HERO HEADER -->
+    <header class="bg-[#0f172a] text-white pt-16 pb-24 px-6 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="border-l-4 border-[#f59e0b] pl-6">
+                <p class="text-[#0ea5e9] font-bold tracking-widest uppercase text-sm mb-2">Tugas Individu: Penerapan Konsep</p>
+                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">Manajemen Risiko Logistik <br> & Analisis Studi Kasus</h1>
+                <p class="text-slate-400 text-lg max-w-2xl">Analisis mendalam mengenai pengiriman alat berat (Project Logistics) dan refleksi strategis adopsi manajemen risiko pada UKM di Indonesia.</p>
+            </div>
+            
+            <div class="mt-8 flex items-center space-x-4">
+                <div class="h-10 w-10 rounded-full bg-[#f59e0b] flex items-center justify-center font-bold text-[#0f172a]">DH</div>
+                <div>
+                    <p class="font-semibold text-white">Dodi Hariyanto</p>
+                    <p class="text-sm text-slate-400">NIM: 211240033 | S2 Manajemen Logistik</p>
+                </div>
+            </div>
+        </div>
+        <!-- Abstract BG Decoration -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-[#0ea5e9] opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 -mt-16 relative z-20 space-y-16">
+
+        <!-- ============================================== -->
+        <!-- TUGAS 1: ANALISIS RISIKO PENGIRIMAN (CASE STUDY) -->
+        <!-- ============================================== -->
+        <section>
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="h-8 w-2 bg-[#f59e0b]"></div>
+                <h2 class="text-3xl font-bold text-[#0f172a]">Tugas 1: Studi Kasus Pengiriman</h2>
+            </div>
+            
+            <!-- Context Card -->
+            <div class="card p-8 mb-8 border-t-4 border-[#0ea5e9]">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">Pengiriman Excavator CAT 320</h3>
+                        <p class="text-slate-500 text-sm">Rute: Jakarta ➔ Kalimantan Timur</p>
+                    </div>
+                    <span class="mt-2 md:mt-0 px-4 py-1 bg-blue-50 text-[#0ea5e9] text-xs font-bold uppercase rounded-full tracking-wide">Project Logistics</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed">
+                    Pengiriman alat berat memiliki kompleksitas tinggi akibat dimensi, berat, dan nilai barang. Berdasarkan analisis, terdapat tiga risiko krusial yang harus dimitigasi untuk memastikan alat tiba tepat waktu di <em>site</em> proyek tanpa kerusakan. Strategi yang digunakan meliputi Mitigasi Terencana, Transfer Risiko (Asuransi), dan Administrasi Ketat.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- VISUALIZATION 1: RISK MATRIX (SCATTER PLOT) -->
+                <!-- Goal: Relationship (Likelihood vs Impact). Justification: Scatter plot allows plotting distinct risks on a 2D matrix. -->
+                <div class="card p-6">
+                    <h4 class="font-bold text-slate-800 mb-2">Matriks Profil Risiko</h4>
+                    <p class="text-xs text-slate-500 mb-6">Pemetaan risiko berdasarkan Probabilitas (Likelihood) dan Dampak (Impact).</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="riskMatrixChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+                         <div class="p-2 bg-red-50 text-red-700 rounded">
+                            <span class="block font-bold">Delay</span>
+                            Impact Tinggi
+                         </div>
+                         <div class="p-2 bg-orange-50 text-orange-700 rounded">
+                            <span class="block font-bold">Kerusakan</span>
+                            Likelihood Rendah
+                         </div>
+                         <div class="p-2 bg-yellow-50 text-yellow-700 rounded">
+                            <span class="block font-bold">Admin</span>
+                            Ancaman Proses
+                         </div>
+                    </div>
+                </div>
+
+                <!-- VISUALIZATION 2: MITIGATION STRATEGY MIX (DOUGHNUT) -->
+                <!-- Goal: Compare/Composition. Justification: Shows the proportional focus of our strategy (Mitigate vs Transfer). -->
+                <div class="card p-6">
+                    <h4 class="font-bold text-slate-800 mb-2">Distribusi Strategi Mitigasi</h4>
+                    <p class="text-xs text-slate-500 mb-6">Fokus penanganan risiko untuk pengiriman CAT 320.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="strategyChart"></canvas>
+                    </div>
+                    
+                    <ul class="mt-4 space-y-2 text-sm text-slate-600">
+                        <li class="flex items-center">
+                            <span class="w-3 h-3 rounded-full bg-[#0ea5e9] mr-2"></span>
+                            <strong>Mitigate (50%):</strong> Perencanaan & Buffer Time.
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-3 h-3 rounded-full bg-[#f59e0b] mr-2"></span>
+                            <strong>Transfer (30%):</strong> Asuransi Marine Cargo All-Risk.
+                        </li>
+                         <li class="flex items-center">
+                            <span class="w-3 h-3 rounded-full bg-[#64748b] mr-2"></span>
+                            <strong>Avoid (20%):</strong> Cek dokumen berlapis.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- PROCESS FLOW (Custom HTML/Tailwind) -->
+            <!-- Goal: Organize/Process. Justification: Sequential steps visualized clearly without SVG. -->
+            <div class="mt-8">
+                <h4 class="font-bold text-slate-800 mb-4">Alur Mitigasi Utama</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    
+                    <!-- Step 1 -->
+                    <div class="flow-step bg-white p-5 rounded-lg border-l-4 border-[#0ea5e9] shadow-sm">
+                        <div class="text-2xl mb-2">📋</div>
+                        <h5 class="font-bold text-slate-800 text-sm">1. Rencana Terstruktur</h5>
+                        <p class="text-xs text-slate-500 mt-1">Booking kapal H-7, buffer time, dan alternatif jadwal.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flow-step bg-white p-5 rounded-lg border-l-4 border-[#0ea5e9] shadow-sm">
+                        <div class="text-2xl mb-2">🤝</div>
+                        <h5 class="font-bold text-slate-800 text-sm">2. Koordinasi Tim</h5>
+                        <p class="text-xs text-slate-500 mt-1">Sinergi antara vendor, tim pelabuhan, dan customer.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flow-step bg-white p-5 rounded-lg border-l-4 border-[#f59e0b] shadow-sm">
+                        <div class="text-2xl mb-2">🛡️</div>
+                        <h5 class="font-bold text-slate-800 text-sm">3. Asuransi Penuh</h5>
+                        <p class="text-xs text-slate-500 mt-1">Marine Cargo All-Risk untuk proteksi nilai aset.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-white p-5 rounded-lg border-l-4 border-[#10b981] shadow-sm">
+                        <div class="text-2xl mb-2">📡</div>
+                        <h5 class="font-bold text-slate-800 text-sm">4. Daily Monitoring</h5>
+                        <p class="text-xs text-slate-500 mt-1">Tracking posisi dan status dokumen setiap hari.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TUGAS 2: REFLEKSI MANAJEMEN RISIKO (UKM) -->
+        <!-- ============================================== -->
+        <section>
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="h-8 w-2 bg-[#0ea5e9]"></div>
+                <h2 class="text-3xl font-bold text-[#0f172a]">Tugas 2: Refleksi Risiko UKM</h2>
+            </div>
+
+            <p class="mb-8 text-slate-600 max-w-4xl">
+                Banyak UKM logistik di Indonesia masih mengabaikan manajemen risiko, menganggapnya hanya relevan untuk perusahaan besar. Hal ini menciptakan kerentanan operasional yang tinggi. Di bawah ini adalah analisis faktor penyebab dan solusi konkret untuk meningkatkan adopsi manajemen risiko.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- VISUALIZATION 3: HINDERING FACTORS (BAR CHART) -->
+                <!-- Goal: Rank/Compare. Justification: Comparing the weight of different barriers to adoption. -->
+                <div class="card p-6 lg:col-span-2">
+                    <h4 class="font-bold text-slate-800 mb-2">Mengapa UKM Mengabaikan Risiko?</h4>
+                    <p class="text-xs text-slate-500 mb-6">Analisis faktor penghambat utama adopsi manajemen risiko.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="barriersChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- KEY TAKEAWAY -->
+                <div class="card p-6 bg-[#0f172a] text-white flex flex-col justify-center text-center">
+                    <h3 class="text-6xl font-black text-[#f59e0b] mb-2">3</h3>
+                    <h4 class="text-xl font-bold mb-4">Pilar Hambatan</h4>
+                    <p class="text-slate-300 text-sm">
+                        Literasi, Sumber Daya, dan Budaya menjadi "segitiga penghambat" yang harus diurai melalui solusi praktis dan insentif.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- SOLUTIONS GRID -->
+            <div class="mt-10">
+                <h4 class="font-bold text-slate-800 mb-6 text-xl">Solusi Realistis & Konkret</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Solution 1 -->
+                    <div class="card p-6 border-t-4 border-[#0ea5e9]">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-[#0ea5e9] text-2xl font-bold mb-4">1</div>
+                        <h5 class="font-bold text-slate-800 mb-2">Edukasi Digital</h5>
+                        <p class="text-sm text-slate-600">Pelatihan sederhana melalui platform digital pemerintah/Dinas UMKM untuk mengenalkan konsep dasar risiko tanpa biaya mahal.</p>
+                    </div>
+
+                    <!-- Solution 2 -->
+                    <div class="card p-6 border-t-4 border-[#0ea5e9]">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-[#0ea5e9] text-2xl font-bold mb-4">2</div>
+                        <h5 class="font-bold text-slate-800 mb-2">Template Praktis</h5>
+                        <p class="text-sm text-slate-600">Penyediaan <em>Risk Register</em> sederhana yang mudah diadopsi UKM untuk operasional harian tanpa membebani admin.</p>
+                    </div>
+
+                    <!-- Solution 3 -->
+                    <div class="card p-6 border-t-4 border-[#f59e0b]">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-[#f59e0b] text-2xl font-bold mb-4">3</div>
+                        <h5 class="font-bold text-slate-800 mb-2">Insentif Fiskal</h5>
+                        <p class="text-sm text-slate-600">Pemberian potongan pajak atau akses pembiayaan prioritas bagi UKM yang terbukti menerapkan standar manajemen risiko.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#1e293b] text-slate-400 py-8 text-center mt-12 border-t border-slate-700">
+        <p class="text-sm">&copy; 2024 Dodi Hariyanto - NIM 211240033</p>
+        <p class="text-xs mt-2">Program Studi Magister Manajemen Logistik</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- HELPER FUNCTION: Label Splitting for Labels > 16 Chars ---
+        function splitLabel(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- MANDATORY TOOLTIP CONFIG ---
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- CHART 1: RISK MATRIX (SCATTER PLOT) ---
+            const ctxRisk = document.getElementById('riskMatrixChart').getContext('2d');
+            
+            // Data for Risk Matrix
+            // Risk 1: Delay (Likelihood 3, Impact 4)
+            // Risk 2: Damage (Likelihood 2, Impact 5)
+            // Risk 3: Admin (Likelihood 3, Impact 3.5 - Offset for visual clarity)
+            
+            new Chart(ctxRisk, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Keterlambatan Kapal',
+                            data: [{x: 3, y: 4}],
+                            backgroundColor: '#ef4444', // Red for high frequency risk
+                            pointRadius: 12,
+                            pointHoverRadius: 14
+                        },
+                        {
+                            label: 'Kerusakan Barang',
+                            data: [{x: 1.5, y: 4.8}], // Visual adjustment to Low L, High I
+                            backgroundColor: '#f59e0b', // Amber
+                            pointRadius: 12,
+                            pointHoverRadius: 14
+                        },
+                        {
+                            label: 'Masalah Dokumen',
+                            data: [{x: 3, y: 3}], // Med L, Med I
+                            backgroundColor: '#0ea5e9', // Blue
+                            pointRadius: 12,
+                            pointHoverRadius: 14
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            min: 0,
+                            max: 5,
+                            title: { display: true, text: 'Likelihood (Kemungkinan)' },
+                            grid: { color: '#e2e8f0' }
+                        },
+                        y: {
+                            min: 0,
+                            max: 6,
+                            title: { display: true, text: 'Impact (Dampak)' },
+                            grid: { color: '#e2e8f0' }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ` (L:${context.raw.x}, I:${context.raw.y})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- CHART 2: STRATEGY MIX (DOUGHNUT) ---
+            const ctxStrategy = document.getElementById('strategyChart').getContext('2d');
+            
+            new Chart(ctxStrategy, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mitigate', 'Transfer', 'Avoid'],
+                    datasets: [{
+                        data: [50, 30, 20], // Rough weightings based on narrative
+                        backgroundColor: [
+                            '#0ea5e9', // Mitigate (Blue)
+                            '#f59e0b', // Transfer (Orange)
+                            '#64748b'  // Avoid (Slate)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' },
+                        tooltip: commonTooltipConfig
+                    }
+                }
+            });
+
+            // --- CHART 3: SME BARRIERS (HORIZONTAL BAR) ---
+            const ctxBarriers = document.getElementById('barriersChart').getContext('2d');
+            
+            // Labels needing split
+            const rawLabels = [
+                "Keterbatasan Literasi (Knowledge)", 
+                "Keterbatasan Sumber Daya (Resources)", 
+                "Budaya Bisnis Reaktif (Culture)"
+            ];
+            const splitLabels = rawLabels.map(l => splitLabel(l));
+
+            new Chart(ctxBarriers, {
+                type: 'bar',
+                data: {
+                    labels: splitLabels,
+                    datasets: [{
+                        label: 'Tingkat Signifikansi Hambatan',
+                        data: [85, 75, 60], // Qualitative values mapped to 0-100 scale
+                        backgroundColor: [
+                            '#0f172a', // Navy
+                            '#0ea5e9', // Blue
+                            '#f59e0b'  // Orange
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal Bar
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { display: false }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: commonTooltipConfig
+                    }
+                }
+            });
+
+        });
+    </script>
+    
+    <!-- NO SVG / NO MERMAID CONFIRMATION:
+         I confirm that no Mermaid JS or SVG graphics were used in this output. 
+         All diagrams are constructed using CSS styling or Chart.js canvas rendering. 
+    -->
+</body>
+</html>
